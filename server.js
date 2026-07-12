@@ -65,7 +65,21 @@ app.post('/api/chat', async (req, res) => {
     res.status(500).json({ error: '出错了' });
   }
 });
-
+app.get('/api/history', async (req, res) => {
+  try {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/messages?order=created_at.asc`, {
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`
+      }
+    });
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: '出错了' });
+  }
+});
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
